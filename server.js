@@ -33,54 +33,54 @@ mongoose.connect("mongodb://localhost/unit18Populater", {
 
 // Routes
 
-// A GET route for scraping the NY Times website
+// A GET route for scraping the Reddit Life Pro Tips page
 app.get("/scrape", function(req, res) {
   // First, we grab the body of the html with axios
-  axios
-    .get(
-      "https://old.reddit.com/r/lifeprotip/"
-    )
-    .then(function(response) {
-      // Then, we load that into cheerio and save it to $ for a shorthand selector
-        var $ = cheerio.load(response.data);
+  axios.get("https://old.reddit.com/r/lifeprotip/").then(function(response) {
+    // Then, we load that into cheerio and save it to $ for a shorthand selector
+    var $ = cheerio.load(response.data);
 
-      // With cheerio, find each p-tag with the "title" class
-      // (i: iterator. element: the current element)
-        $("p.title").each(function(i, element) {
-        
+    console.log(response.data);
+
+    // An empty array to save the data that we'll scrape
+    var results = [];
+
+    // With cheerio, find each p-tag with the "title" class
+    // (i: iterator. element: the current element)
+    $("p.title").each(function(i, element) {
       // Save the text of the element in a "title" variable
-        var title = $(element).text();
+      var title = $(element).text();
 
       // In the currently selected element, look at its child elements (i.e., its a-tags),
       // then save the values for any "href" attributes that the child elements may have
-        var link = $(element).children().attr("href");
+      var link = $(element)
+        .children()
+        .attr("href");
 
       // Save these results in an object that we'll push into the results array we defined earlier
-        results.push({
-          title: title,
-            link: link
-            });
-        });
+      results.push({
+        title: title,
+        link: link
+      });
+    });
 
     // Log the results once you've looped through each of the elements found with cheerio
-        console.log(results);
-          });
+    console.log(results);
+  });
 
-        // Create a new Article using the `result` object built from scraping
-        db.Article.create(result)
-          .then(function(dbArticle) {
-            // View the added result in the console
-            console.log(dbArticle);
-          })
-          .catch(function(err) {
-            // If an error occurred, log it
-            console.log(err);
-          });
-        });
-
-      // Send a message to the client
-      res.send("Scrape Complete");
+  // Create a new Article using the `result` object built from scraping
+  db.Article.create(result)
+    .then(function(dbArticle) {
+      // View the added result in the console
+      console.log(dbArticle);
+    })
+    .catch(function(err) {
+      // If an error occurred, log it
+      console.log(err);
     });
+
+  // Send a message to the client
+  res.send("Scrape Complete");
 });
 
 // Route for getting all Articles from the db
