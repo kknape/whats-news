@@ -12,7 +12,7 @@ var ArticleSchema = new Schema({
     required: true
   },
   // `short description` is required and of type String
-  description: {
+  snippet: {
     type: String,
     required: true
   },
