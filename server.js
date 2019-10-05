@@ -42,33 +42,15 @@ console.log(
 
 // A GET route for scraping the Reddit Life Pro Tips page
 app.get("/scrape", function(req, res) {
-  // First, we grab the body of the html with axios
+  // Grab the body of the html with axios
   axios.get("https://old.reddit.com/r/lifeprotip/").then(function(response) {
-    // Then, we load that into cheerio and save it to $ for a shorthand selector
+    // load that into cheerio and save it to $ for a shorthand selector
     var $ = cheerio.load(response.data);
 
-    // Now, we grab every p within an title tag, and do the following:
+    // grab every p within an title tag, and do the following:
     $("p.title").each(function(i, element) {
-      // Save an empty result object
-      var result = {};
-
-      // Add the text and href of every link, and save them as properties of the result object
-      result.title = $(this)
-        .children("a")
-        .text();
-
-      result.link = $(this)
-        .children("a")
-        .attr("href");
-
-      /*  console.log($);
-
-    // An empty array to save the data that we'll scrape
-    var results = [];
-
-    // With cheerio, find each p-tag with the "title" class
-    // (i: iterator. element: the current element)
-    $("p.title").each(function(i, element) {
+      // An empty array to save the data that we'll scrape
+      var results = [];
       // Save the text of the element in a "title" variable
       var title = $(element).text();
 
@@ -83,10 +65,9 @@ app.get("/scrape", function(req, res) {
         title: title,
         link: link
       });
-      */
     });
     // Log the results once you've looped through each of the elements found with cheerio
-    console.log("Show me the" + results);
+    console.log("Show me..." + results);
   });
 
   // Create a new Article using the `result` object built from scraping

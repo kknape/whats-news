@@ -1,27 +1,31 @@
 $(document).ready(function() {
-  // Setting a reference to the article-container div where all the dynamic content will go
   // Adding event listener to "scrape new article" button
-  var articleContainer = $(".article-container");
-  $(document).on("click", ".scrape-new", handleArticleScrape);
-  console.log("Clicked.");
-  function handleArticleScrape() {
-    // Grab the articles as a json
-    $.getJSON("/articles", function(data) {
-      // For each one
-      for (var i = 0; i < data.length; i++) {
-        // Display the corresponding information on the page
-        $("#articles").append(
-          "<p data-id='" +
-            data[i]._id +
-            "'>" +
-            data[i].title +
-            "<br />" +
-            data[i].link +
-            "</p>"
-        );
-      }
+  $(document).on("click", ".scrape-new", function() {
+    $.ajax({
+      method: "GET",
+      url: "/scrape"
+    }).done(function(data) {
+      console.log(data);
     });
-  }
+  });
+
+  // Grab the articles
+  $.getJSON("/articles", function(data) {
+    // For each one
+    for (var i = 0; i < data.length; i++) {
+      // Display the corresponding information on the page
+      $("#articles").append(
+        "<p data-id='" +
+          data[i]._id +
+          "'>" +
+          data[i].title +
+          "<br />" +
+          data[i].link +
+          "</p>"
+      );
+    }
+  });
+
   // Whenever someone clicks a p tag
   $(document).on("click", "p", function() {
     // Empty the notes from the note section
