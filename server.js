@@ -31,6 +31,13 @@ mongoose.connect("mongodb://localhost/unit18Populater", {
   useNewUrlParser: true
 });
 
+// Tell the console what server.js is doing
+console.log(
+  "\n***********************************\n" +
+    "Grabbing every thread name and link\n" +
+    "from reddit's lifeprotips board:" +
+    "\n***********************************\n"
+);
 // Routes
 
 // A GET route for scraping the Reddit Life Pro Tips page
@@ -40,7 +47,21 @@ app.get("/scrape", function(req, res) {
     // Then, we load that into cheerio and save it to $ for a shorthand selector
     var $ = cheerio.load(response.data);
 
-    console.log(response.data);
+    // Now, we grab every p within an title tag, and do the following:
+    $("p.title").each(function(i, element) {
+      // Save an empty result object
+      var result = {};
+
+      // Add the text and href of every link, and save them as properties of the result object
+      result.title = $(this)
+        .children("a")
+        .text();
+
+      result.link = $(this)
+        .children("a")
+        .attr("href");
+
+      /*  console.log($);
 
     // An empty array to save the data that we'll scrape
     var results = [];
@@ -62,10 +83,10 @@ app.get("/scrape", function(req, res) {
         title: title,
         link: link
       });
+      */
     });
-
     // Log the results once you've looped through each of the elements found with cheerio
-    console.log(results);
+    console.log("Show me the" + results);
   });
 
   // Create a new Article using the `result` object built from scraping
