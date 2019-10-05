@@ -1,0 +1,24 @@
+Psuedo Code
+
+Start with No articles
+ -- Home page
+    -- Header row with Title, Home button, Button-"Scrape New Articles" [align all items left]
+
+Click "Scrape New Articles", app will get 20 articles from NY Times.
+
+Display User Message -"Added 20 new articles!", user closes Message
+
+Articles dipslay below with Title, short description and "Add a Note" button
+
+Article Notes button >>
+    
+    Opens Notes Panel 
+        --Get saved notes from db and display on page, each has a delete button
+        --Open text field -- user can add a Note
+        --Button "Save Note" -- saves note for the given article in db
+
+
+
+
+
+
